@@ -8,6 +8,6 @@ export default function playlist(state=initialState,action){
     ];
     
   }
-  else if (action.type==="DELETE_TRACK"){ return state=undefined, action=undefined}
+  //else if (action.type==="DELETE_TRACK"){ return state=undefined, action=undefined}
   return state;
   }
