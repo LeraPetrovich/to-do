@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux'
+//import * as pastState from './reducers/past-state';
 class App extends Component{
   addTrack(){
     this.props.onAddTrack(this.trackInput.value);
@@ -23,6 +24,15 @@ class App extends Component{
     };
 }
 
+pastState=(state = [], action)=> {
+  switch (action.type) {
+    case 'RESET_TYPE_ID':
+      return {...state, type_id: null};
+    default:
+      return state;
+  }
+}
+
 
 
 handleButtonClick = () => {
@@ -39,6 +49,7 @@ if(this.state.buttonColor==="white"){
 }
 
   render(){
+    //this.props.dispatch(pastState.resetTypeId());
     console.log(this.props.tracks);
     return(
       <div>
@@ -55,17 +66,21 @@ style={{ border:'0', background:'green', color:'white',height:'25px', borderRadi
  onClick={this.addTrack.bind(this)}>Add To Do</button>
 <button
 style={{ border:'0', background:'red', color:'white',height:'25px', borderRadius:'10px'  }} 
-onClick={this.deleteTrack.bind(this)}>DELETE TRACK</button>
+onClick={this.deleteTrack.bind(this)}>DELETE TO DO</button>
+<button onClick={this.props.dispatch(pastState.resetTypeId())}>Click</button>
 <ul className="list"
 style={{border:'2px solid rgb(241, 237, 237)', width:'700px', height:'700px', margin:'20px 0px 0px 400px', background:'rgb(241, 237, 237)'}}>
   {this.props.tracks.map((track,index)=>
-  <li key={index}>{track.name}</li>
-
-  )}
-    {this.props.tracks.map((index)=>
-     <button id="Click" key={index} style={{background: this.state.buttonColor}}
-     onClick={this.handleButtonClick}></button>
-  )}
+  <ol
+  style={{fontSize:'26px'}}
+  key={index}>{track.name}
+  <button id="Click" key={index}
+   style={{background: this.state.buttonColor, width:'20px', height:'20px', marginLeft:'20px'}}
+    onClick={this.handleButtonClick}>
+      </button>
+      </ol>
+      
+)}
 </ul>
 </div>
   <div className="Find" style={{margin:"-900px 0px 0px 1200px"}}>
@@ -75,11 +90,11 @@ placeholder="Find"
 <button onClick={this.findTrack.bind(this)} 
 style={{ border:'0', background:'lightseagreen', color:'white',height:'25px', borderRadius:'10px'  }}
 >Find To Do</button>
-<ul className="list">
+<ol className="list2">
   {this.props.tracks.map((track,index)=>
   <li key={index}>{track.name}</li>
   )}
-</ul>
+</ol>
 </div>
       </div>
     );
@@ -104,7 +119,7 @@ const payload ={
 
      ondeleteTrack: (CaracterName)=>{
       dispatch({type:"DELETE_TRACK", payload: CaracterName})
-    }
+    },
   }
   
    
