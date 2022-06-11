@@ -2,10 +2,11 @@ import "../App.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 class Register extends Component {
-    addTrack() {
+     addTrack() {
         this.props.onAddTrack(this.trackInput.value);
         console.log("Add track", this.trackInput.value);
         this.trackInput.value = "";
+        alert("Your data has been saved");
       }
       render(){
         console.log(this.props.tracks);
@@ -47,7 +48,7 @@ class Register extends Component {
               placeholder="Repet password"/>
           </p>
 
-          <button  onClick={this.addTrack.bind(this)}>Send</button>
+          <button className="nav-link-button-registr" onClick={this.addTrack.bind(this)}>Send</button>
         </form>
       </div>
     </body>

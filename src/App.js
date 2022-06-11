@@ -11,9 +11,9 @@ function App() {
         <Navbar />
       </div>
       <Routes>
-        <Route path="/input" element={<Input />} />
+        <Route path="/" element={<Input />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/todo" element={<Home />} />
       </Routes>
     </Router>
   );
