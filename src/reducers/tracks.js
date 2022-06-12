@@ -13,7 +13,12 @@ export default function playlist(state=initialState,action){
       ];*/
       
     }
-    else if (action.type==="DELETE_TRACK"){return state;}
+    else if (action.type==="ADD_NAME"){
+      return[
+        ...state,
+        action.payload
+      ];
+    }
 
     return state;
     }

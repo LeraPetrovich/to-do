@@ -1,15 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
-class Input extends Component {
-  addTrack() {
-    this.props.onAddTrack(this.trackInput.value);
-    console.log("Add track", this.trackInput.value);
-    this.trackInput.value = "";
+const Input = ({trackInput, tracks}) => {
+  function addTrack() {
+    //onAddTrack(trackInput);
+    console.log("Add track", trackInput);
+    //trackInput = "";
   }
-  render() {
-    console.log(this.props.tracks);
+    console.log(tracks);
     return (
       <div className="form">
         <h2 className="Register-text">Input:</h2>
@@ -21,7 +20,7 @@ class Input extends Component {
               <input
                 type="text"
                 ref={(input) => {
-                  this.trackInput = input;
+                  trackInput = input;
                 }}
                 placeholder="Name"
               />
@@ -31,13 +30,13 @@ class Input extends Component {
               <input
                 type="text"
                 ref={(input) => {
-                  this.trackInput = input;
+                  trackInput = input;
                 }}
                 placeholder="Password"
               />
             </p>
 
-            <button className="button-input">
+            <button onClick={addTrack()} className="button-input">
               <NavLink className="nav-link-button" to="/todo">
                 Input
               </NavLink>
@@ -52,7 +51,6 @@ class Input extends Component {
       </div>
     );
   }
-}
 export default connect(
   (state) => ({
     tracks: state.tracks,

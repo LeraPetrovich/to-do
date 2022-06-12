@@ -1,24 +1,22 @@
 import "../App.css";
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
-class Register extends Component {
-     addTrack() {
-        this.props.onAddTrack(this.trackInput.value);
-        console.log("Add track", this.trackInput.value);
-        this.trackInput.value = "";
-        alert("Your data has been saved");
+const Register = ({tracks, onAddTrack, trackInput1,trackInput2,trackInput3,trackInput4 }) => {
+    function addTrack() {
+        //onAddTrack(trackInput1,trackInput2,trackInput3,trackInput4);
+        console.log("Add track", trackInput1,trackInput2,trackInput3,trackInput4);
+       //trackInput = "";
+        //alert("Your data has been saved");
       }
-      render(){
-        console.log(this.props.tracks);
+        console.log(tracks);
   return (
-    <body>
       <div className="form">
         <h2 className="Register-text">Register user:</h2>
         <form style={{ marginLeft: "50px", marginTop: "100px" }}>
           <p className="Name">
             Name: <input type="text" 
             ref={(input) => {
-                this.trackInput = input;
+                trackInput1 = input;
               }}
               placeholder="Name"
             />
@@ -27,7 +25,7 @@ class Register extends Component {
             Email:{" "}
             <input type="text" 
             ref={(input) => {
-                this.trackInput = input;
+                trackInput2 = input;
               }}
               placeholder="Email"
             />
@@ -35,7 +33,7 @@ class Register extends Component {
           <p className="Name">
             Password: <input type="text" 
             ref={(input) => {
-                this.trackInput = input;
+               trackInput3 = input;
               }}
               placeholder="Password"/>
           </p>
@@ -43,18 +41,16 @@ class Register extends Component {
             Repeat password:{" "}
             <input type="text"
             ref={(input) => {
-                this.trackInput = input;
+                trackInput4 = input;
               }}
               placeholder="Repet password"/>
           </p>
 
-          <button className="nav-link-button-registr" onClick={this.addTrack.bind(this)}>Send</button>
+          <button className="nav-link-button-registr" onClick={addTrack()}>Send</button>
         </form>
       </div>
-    </body>
   );
       }
-}
 export default connect(
   (state) => ({
     tracks: state.tracks,

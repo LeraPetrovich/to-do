@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 //import * as pastState from './reducers/past-state';
-class App extends Component {
+class Home extends Component {
   addTrack() {
     this.props.onAddTrack(this.trackInput.value);
     console.log("Add track", this.trackInput.value);
@@ -185,4 +185,4 @@ export default connect(
       dispatch({ type: "DELETE_TRACK", payload: CaracterName });
     },
   })
-)(App);
+)(Home);
