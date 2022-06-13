@@ -1,69 +1,86 @@
-import React from "react";
 import "../App.css";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
-const Input = ({trackInput, tracks}) => {
-  function addTrack() {
-    //onAddTrack(trackInput);
-    console.log("Add track", trackInput);
-    //trackInput = "";
-  }
-    console.log(tracks);
-    return (
-      <div className="form">
-        <h2 className="Register-text">Input:</h2>
-        <div className="forms" 
+import { NavLink} from "react-router-dom";
+const Input = ({ input, inputToDo }) => {
+  console.log(input);
+  const [inputName, setName] = useState("");
+  const [inputPasword, setPassword] = useState("");
+
+  return (
+    <div
+      style={{
+        margin: "0 auto",
+        height: "500px",
+        width: "700px",
+        marginLeft: "400px",
+      }}
+    >
+      <h2 className="Register-text" style={{ textAlign: "center" }}>
+        Input:
+      </h2>
+      <div style={{ marginLeft: "150px", marginTop: "160px" }}>
+        <p className="Name">
+          Name:{" "}
+          <input
+            type="text"
+            value={inputName}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            placeholder="Name"
+          />
+        </p>
+        <p className="Name">
+          Password:{" "}
+          <input
+            type="text"
+            id="password"
+            value={inputPasword}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Password"
+          />
+        </p>
+        <button
+          className="nav-link-button-registr"
+          onClick={() => inputToDo(inputName,inputPasword)}
         >
-          <form className="form-name">
-            <p>
-              Name:{" "}
-              <input
-                type="text"
-                ref={(input) => {
-                  trackInput = input;
-                }}
-                placeholder="Name"
-              />
-            </p>
-            <p>
-              Password:{" "}
-              <input
-                type="text"
-                ref={(input) => {
-                  trackInput = input;
-                }}
-                placeholder="Password"
-              />
-            </p>
-
-            <button onClick={addTrack()} className="button-input">
-              <NavLink className="nav-link-button" to="/todo">
-                Input
-              </NavLink>
-            </button>
-
-            <p>if you are not registered:  <NavLink className="nav-link-input" to="/register">
-              Register
-            </NavLink></p>
-            
-          </form>
+          Send
+        </button>
+        <div>
+          <p>
+          If you are not registered:
+          <NavLink className="nav-link" to="/register">
+          Registration
+        </NavLink>
+          </p>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+};
+
 export default connect(
   (state) => ({
-    tracks: state.tracks,
+    input: state.input,
   }),
   (dispatch) => ({
-    onAddTrack: (trackName) => {
+    inputToDo: (input1, input2) => {
       const payload = {
         id: Date.now().toString(),
-        name: trackName,
+        name: input1,
+        pasword:input2,
       };
-
-      dispatch({ type: "ADD_TRACK", payload });
+      dispatch({ type: "ADD_INPUT", payload });
+    },
+    inputPas: (input) => {
+      const payload = {
+        id: Date.now().toString(),
+        name: input,
+      };
+      dispatch({ type: "ADD_INPUT", payload });
     },
   })
 )(Input);
-//onClick={this.addTrack.bind(this)} в нопке

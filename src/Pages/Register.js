@@ -1,68 +1,74 @@
 import "../App.css";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-const Register = ({tracks, onAddTrack, trackInput1,trackInput2,trackInput3,trackInput4 }) => {
-    function addTrack() {
-        //onAddTrack(trackInput1,trackInput2,trackInput3,trackInput4);
-        console.log("Add track", trackInput1,trackInput2,trackInput3,trackInput4);
-       //trackInput = "";
-        //alert("Your data has been saved");
-      }
-        console.log(tracks);
-  return (
-      <div className="form">
-        <h2 className="Register-text">Register user:</h2>
-        <form style={{ marginLeft: "50px", marginTop: "100px" }}>
-          <p className="Name">
-            Name: <input type="text" 
-            ref={(input) => {
-                trackInput1 = input;
-              }}
-              placeholder="Name"
-            />
-          </p>
-          <p className="Name">
-            Email:{" "}
-            <input type="text" 
-            ref={(input) => {
-                trackInput2 = input;
-              }}
-              placeholder="Email"
-            />
-          </p>
-          <p className="Name">
-            Password: <input type="text" 
-            ref={(input) => {
-               trackInput3 = input;
-              }}
-              placeholder="Password"/>
-          </p>
-          <p>
-            Repeat password:{" "}
-            <input type="text"
-            ref={(input) => {
-                trackInput4 = input;
-              }}
-              placeholder="Repet password"/>
-          </p>
+const Register = ({ todo, onAddToDo }) => {
+  console.log(todo);
+  const [inputName, setName] = useState("");
+  const [inputEmail, setEmail] = useState("");
+  const [inputPasword, setPassword] = useState("");
 
-          <button className="nav-link-button-registr" onClick={addTrack()}>Send</button>
-        </form>
-      </div>
+  return (
+    <div className="form">
+      <h2 className="Register-text">Registration user:</h2>
+      <p className="Name">
+        Name:{" "}
+        <input
+          type="text"
+          value={inputName}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          placeholder="Name"
+        />
+      </p>
+      <p className="Name">
+        Email:{" "}
+        <input
+          type="text"
+          value={inputEmail}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          placeholder="Email"
+        />
+      </p>
+      <p className="Name">
+        Password:{" "}
+        <input
+          type="text"
+          id="password"
+          value={inputPasword}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          placeholder="Password"
+        />
+      </p>
+
+      <button
+        className="nav-link-button-registr"
+        onClick={() => onAddToDo(inputName, inputEmail, inputPasword)}
+      >
+        Send
+      </button>
+    </div>
   );
-      }
+};
+
 export default connect(
   (state) => ({
-    tracks: state.tracks,
+    todo: state.todo,
   }),
   (dispatch) => ({
-    onAddTrack: (trackName) => {
+    onAddToDo: (name, email,password) => {
       const payload = {
         id: Date.now().toString(),
-        name: trackName,
+        name: name,
+        email: email,
+        password:password
       };
 
-      dispatch({ type: "ADD_TRACK", payload });
+      dispatch({ type: "ADD_TODO", payload });
     },
   })
 )(Register);

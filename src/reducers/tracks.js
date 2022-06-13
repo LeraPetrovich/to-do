@@ -5,20 +5,7 @@ export default function playlist(state=initialState,action){
       return[
         ...state,
         action.payload
-      ];
-      /*
-      return [
-        ...state,
-        action.playload
-      ];*/
-      
-    }
-    else if (action.type==="ADD_NAME"){
-      return[
-        ...state,
-        action.payload
-      ];
-    }
+      ];}
 
     return state;
     }
