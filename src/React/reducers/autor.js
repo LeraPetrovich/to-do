@@ -1,4 +1,4 @@
-import { ADD_EMAIL } from "../Action/action-creator";
+import { ADD_EMAIL } from "../action-creator";
 const initialState=[
   ];
 export default function playlist(state=initialState,action){

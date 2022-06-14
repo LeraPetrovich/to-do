@@ -1,4 +1,4 @@
-import { ADD_TRACK } from "../Action/action-creator";
+import { ADD_TRACK } from "../action-creator";
 const initialState=[]
 export default function playlist(state=initialState,action){
     if(action.type===ADD_TRACK){

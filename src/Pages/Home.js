@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { ADD_TRACK } from "../Action/action-creator";
-import { FIND_TRACK } from "../Action/action-creator";
+import { addTrack } from "../React/action-creator";
+import { findTrack } from "../React/action-creator";
 //import * as pastState from './reducers/past-state';
 class Home extends Component {
   addTrack() {
@@ -177,10 +177,10 @@ export default connect(
         name: trackName,
       };
 
-      dispatch({ type: ADD_TRACK, payload });
+      dispatch(addTrack(payload));
     },
     onFindTrack: (name) => {
-      dispatch({ type: FIND_TRACK, payload: name });
+      dispatch(findTrack(name));
     },
 
     ondeleteTrack: (CaracterName) => {

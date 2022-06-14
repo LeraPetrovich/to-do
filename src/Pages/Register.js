@@ -1,7 +1,8 @@
 import "../App.css";
-import { ADD_TODO } from "../Action/action-creator";
+import { ADD_TODO } from "../React/action-creator";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { addTodo } from "../React/action-creator";
 const Register = ({ todo, onAddToDo }) => {
   console.log(todo);
   const [inputName, setName] = useState("");
@@ -69,7 +70,7 @@ export default connect(
         password:password
       };
 
-      dispatch({ type: ADD_TODO, payload });
+      dispatch(addTodo(payload));
     },
   })
 )(Register);
