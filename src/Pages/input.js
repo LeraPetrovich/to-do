@@ -1,4 +1,5 @@
 import "../App.css";
+import { ADD_INPUT } from "../Action/action-creator";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { NavLink} from "react-router-dom";
@@ -73,14 +74,14 @@ export default connect(
         name: input1,
         pasword:input2,
       };
-      dispatch({ type: "ADD_INPUT", payload });
+      dispatch({ type: ADD_INPUT, payload });
     },
     inputPas: (input) => {
       const payload = {
         id: Date.now().toString(),
         name: input,
       };
-      dispatch({ type: "ADD_INPUT", payload });
+      dispatch({ type: ADD_INPUT, payload });
     },
   })
 )(Input);
