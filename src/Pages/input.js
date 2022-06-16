@@ -1,14 +1,66 @@
 import "../App.css";
-import { ADD_INPUT } from "../React/action-creator";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { NavLink} from "react-router-dom";
 import { addInput } from "../React/action-creator";
+import { collection, addDoc, getDocs } from "firebase/firestore"; 
+//import  {getAuth} from 'firebase/auth'
+import { firestore } from "../firebase";
 const Input = ({ input, inputToDo }) => {
   console.log(input);
   const [inputName, setName] = useState("");
   const [inputPasword, setPassword] = useState("");
 
+
+  //////////////////////////////////////////////////////////////
+  async function dataBase(){
+    const docRef = await addDoc(collection(firestore, "users"), {
+      name: inputName,
+      password: inputPasword,
+    });
+    console.log("Document written with ID: ", docRef.id);
+}
+  /////////////////////////////////////////////////////////////
+  async function gettDocs(){
+  const querySnapshot = await getDocs(collection(firestore, "users"));
+  querySnapshot.forEach((doc) => {
+    console.log(`${doc.id} => name:${doc.data().name}, password:${doc.data().password}`);
+  })}
+ 
+ //////////////////////////////////////////////////////////////
+ /*
+ getAuth()
+  .importUsers(
+    [
+      {
+        uid: 'some-uid',
+        email: 'user@example.com',
+        // Must be provided in a byte buffer.
+        passwordHash: Buffer.from('password-hash'),
+        // Must be provided in a byte buffer.
+        passwordSalt: Buffer.from('salt'),
+      },
+    ],
+    {
+      hash: {
+        algorithm: 'STANDARD_SCRYPT',
+        memoryCost: 1024,
+        parallelization: 16,
+        blockSize: 8,
+        derivedKeyLength: 64,
+      },
+    }
+  )
+  .then((results) => {
+    results.errors.forEach((indexedError) => {
+      console.log(`Error importing user ${indexedError.index}`);
+    });
+  })
+  .catch((error) => {
+    console.log('Error importing users :', error);
+  });
+*/
+ //////////////////////////////////////////////////////////////
   return (
     <div
       style={{
@@ -51,6 +103,18 @@ const Input = ({ input, inputToDo }) => {
         >
           Send
         </button>
+        <button
+          className="nav-link-button-registr"
+          onClick={() => dataBase()}
+        >
+          Send to dataBase
+        </button>
+        <button
+          className="nav-link-button-registr"
+          onClick={() => gettDocs()}
+        >
+          Get 
+        </button>
         <div>
           <p>
           If you are not registered:
@@ -81,8 +145,21 @@ export default connect(
       const payload = {
         id: Date.now().toString(),
         name: input,
+        userId: Date.now().toString(),
       };
       dispatch(addInput(payload));
     },
   })
 )(Input);
+
+//import '../firebase'
+//import firebase from "../firebase";
+/*addBook = event => {
+    event.preventDefault()
+    firestore.collection("to-do").add({
+      name: inputName,
+      password: inputPasword
+    })
+  
+   // this.setState({ name: "", password: ""})
+  }*/

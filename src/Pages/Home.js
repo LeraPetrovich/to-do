@@ -2,8 +2,25 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addTrack } from "../React/action-creator";
 import { findTrack } from "../React/action-creator";
+import { collection, addDoc,getDocs } from "firebase/firestore"; 
+import { firestore } from "../firebase";
 //import * as pastState from './reducers/past-state';
 class Home extends Component {
+    ////////////////////////////////////////////////////////////
+  async basedate(){
+      const docRef = await addDoc(collection(firestore, "to-do"), {
+       todo: this.trackInput.value,
+      });
+      console.log("Document written with ID: ", docRef.id);
+      }
+      ////////////////////////////////////////////////////////////
+      async gettDocs(){
+        const querySnapshot = await getDocs(collection(firestore, "users"));
+        querySnapshot.forEach((doc) => {
+          let idUser= `${doc.data().name}`;
+          console.log(idUser)
+        })}
+      ///////////////////////////////////////////////////////////
   addTrack() {
     this.props.onAddTrack(this.trackInput.value);
     console.log("Add track", this.trackInput.value);
@@ -90,6 +107,16 @@ class Home extends Component {
           >
             Add To Do
           </button>
+          <button
+            onClick={this.basedate.bind(this)}
+          >
+            Add dataBase
+          </button>
+          <button
+            onClick={this.gettDocs.bind(this)}
+          >
+            Add dataBase
+          </button>
 
           <ul
             className="list"
@@ -175,6 +202,9 @@ export default connect(
       const payload = {
         id: Date.now().toString(),
         name: trackName,
+        userID: 24,
+        
+       
       };
 
       dispatch(addTrack(payload));
@@ -183,8 +213,5 @@ export default connect(
       dispatch(findTrack(name));
     },
 
-    ondeleteTrack: (CaracterName) => {
-      dispatch({ type: "DELETE_TRACK", payload: CaracterName });
-    },
   })
 )(Home);

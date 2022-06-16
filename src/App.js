@@ -4,8 +4,10 @@ import Home from "./Pages/Home";
 import Register from "./Pages/Register";
 import Navbar from "./Navbar";
 import "./App.css";
+
 function App() {
   return (
+    
     <Router>
       <div className="App">
         <Navbar />

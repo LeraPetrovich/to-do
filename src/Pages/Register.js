@@ -1,13 +1,24 @@
 import "../App.css";
-import { ADD_TODO } from "../React/action-creator";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { addTodo } from "../React/action-creator";
-const Register = ({ todo, onAddToDo }) => {
+import { collection, addDoc } from "firebase/firestore"; 
+import { firestore } from "../firebase";
+const Register = ({ todo, onAddToDo, addBook }) => {
   console.log(todo);
   const [inputName, setName] = useState("");
   const [inputEmail, setEmail] = useState("");
   const [inputPasword, setPassword] = useState("");
+
+  ////////////////////////////////////////////////////////////
+  function basedate(){
+  const docRef = addDoc(collection(firestore, "registrate"), {
+    name: inputName,
+    email: inputEmail,
+    password: inputPasword
+  });
+  console.log("Document written with ID: ", docRef.name);}
+  ////////////////////////////////////////////////////////////
 
   return (
     <div className="form">
@@ -53,7 +64,13 @@ const Register = ({ todo, onAddToDo }) => {
       >
         Send
       </button>
-    </div>
+      <button
+        className="nav-link-button-registr"
+        onClick={() => basedate()}
+      >
+        Send
+      </button>
+      </div>
   );
 };
 
