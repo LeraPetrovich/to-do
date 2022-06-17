@@ -5,14 +5,8 @@ const Navbar = () => {
   return (
     <div className="navbar-nav fs-5">
       <div className="nav-content">
-        <NavLink className="nav-link" to="/todo">
-          To Do List
-        </NavLink>
-        <NavLink className="nav-link" to="/register">
-          Register
-        </NavLink>
         <NavLink className="nav-link" to="/">
-          Input
+        Еxit
         </NavLink>
       </div>
     </div>

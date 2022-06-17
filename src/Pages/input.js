@@ -4,18 +4,19 @@ import { connect } from "react-redux";
 import { NavLink} from "react-router-dom";
 import { addInput } from "../React/action-creator";
 import { collection, addDoc, getDocs } from "firebase/firestore"; 
-//import  {getAuth} from 'firebase/auth'
 import { firestore } from "../firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 const Input = ({ input, inputToDo }) => {
   console.log(input);
-  const [inputName, setName] = useState("");
+  const [inputEmail, setEmail] = useState("");
   const [inputPasword, setPassword] = useState("");
 
 
   //////////////////////////////////////////////////////////////
   async function dataBase(){
     const docRef = await addDoc(collection(firestore, "users"), {
-      name: inputName,
+      emale: inputEmail,
       password: inputPasword,
     });
     console.log("Document written with ID: ", docRef.id);
@@ -28,38 +29,15 @@ const Input = ({ input, inputToDo }) => {
   })}
  
  //////////////////////////////////////////////////////////////
- /*
- getAuth()
-  .importUsers(
-    [
-      {
-        uid: 'some-uid',
-        email: 'user@example.com',
-        // Must be provided in a byte buffer.
-        passwordHash: Buffer.from('password-hash'),
-        // Must be provided in a byte buffer.
-        passwordSalt: Buffer.from('salt'),
-      },
-    ],
-    {
-      hash: {
-        algorithm: 'STANDARD_SCRYPT',
-        memoryCost: 1024,
-        parallelization: 16,
-        blockSize: 8,
-        derivedKeyLength: 64,
-      },
-    }
-  )
-  .then((results) => {
-    results.errors.forEach((indexedError) => {
-      console.log(`Error importing user ${indexedError.index}`);
-    });
+ let navigate = useNavigate();
+ function userInput(){ const auth = getAuth();
+  signInWithEmailAndPassword(auth, inputEmail, inputPasword).then(() => {
+      navigate("../todo", { replace: true });
   })
-  .catch((error) => {
-    console.log('Error importing users :', error);
-  });
-*/
+  .catch(() => {
+  alert('Invalid password. If you are not registered, please register');
+  })
+}
  //////////////////////////////////////////////////////////////
   return (
     <div
@@ -74,16 +52,16 @@ const Input = ({ input, inputToDo }) => {
         Input:
       </h2>
       <div style={{ marginLeft: "150px", marginTop: "160px" }}>
-        <p className="Name">
-          Name:{" "}
-          <input
-            type="text"
-            value={inputName}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            placeholder="Name"
-          />
+      <p className="Name">
+        Email:{" "}
+        <input
+          type="text"
+          value={inputEmail}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          placeholder="Email"
+        />
         </p>
         <p className="Name">
           Password:{" "}
@@ -99,7 +77,7 @@ const Input = ({ input, inputToDo }) => {
         </p>
         <button
           className="nav-link-button-registr"
-          onClick={() => inputToDo(inputName,inputPasword)}
+          onClick={() => inputToDo(inputEmail,inputPasword)}
         >
           Send
         </button>
@@ -114,6 +92,12 @@ const Input = ({ input, inputToDo }) => {
           onClick={() => gettDocs()}
         >
           Get 
+        </button>
+        <button
+          className="nav-link-button-registr"
+          onClick={() => userInput()}
+        >
+         UserInp
         </button>
         <div>
           <p>
@@ -151,15 +135,3 @@ export default connect(
     },
   })
 )(Input);
-
-//import '../firebase'
-//import firebase from "../firebase";
-/*addBook = event => {
-    event.preventDefault()
-    firestore.collection("to-do").add({
-      name: inputName,
-      password: inputPasword
-    })
-  
-   // this.setState({ name: "", password: ""})
-  }*/

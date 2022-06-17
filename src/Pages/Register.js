@@ -4,7 +4,9 @@ import { connect } from "react-redux";
 import { addTodo } from "../React/action-creator";
 import { collection, addDoc } from "firebase/firestore"; 
 import { firestore } from "../firebase";
-const Register = ({ todo, onAddToDo, addBook }) => {
+import {createUserWithEmailAndPassword,getAuth } from "firebase/auth";
+import 'firebase/auth';
+const Register = ({ todo, onAddToDo }) => {
   console.log(todo);
   const [inputName, setName] = useState("");
   const [inputEmail, setEmail] = useState("");
@@ -18,6 +20,11 @@ const Register = ({ todo, onAddToDo, addBook }) => {
     password: inputPasword
   });
   console.log("Document written with ID: ", docRef.name);}
+  ////////////////////////////////////////////////////////////
+  function inputUser(){
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth,inputEmail, inputPasword)
+  }
   ////////////////////////////////////////////////////////////
 
   return (
@@ -70,7 +77,14 @@ const Register = ({ todo, onAddToDo, addBook }) => {
       >
         Send
       </button>
+      <button
+        className="nav-link-button-registr"
+        onClick={() => inputUser()}
+      >
+        push
+      </button>
       </div>
+      
   );
 };
 
