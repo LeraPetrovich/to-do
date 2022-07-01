@@ -1,209 +1,160 @@
-import React, { Component } from "react";
+import React, { useState,useEffect } from "react";
 import { connect } from "react-redux";
 import { addTrack } from "../React/action-creator";
 import { findTrack } from "../React/action-creator";
-import { collection, addDoc,getDocs } from "firebase/firestore"; 
-import { firestore } from "../firebase";
-//import * as pastState from './reducers/past-state';
-class Home extends Component {
-    ////////////////////////////////////////////////////////////
-  async basedate(){
-      const docRef = await addDoc(collection(firestore, "to-do"), {
-       todo: this.trackInput.value,
-      });
-      console.log("Document written with ID: ", docRef.id);
-      }
-      ////////////////////////////////////////////////////////////
-      async gettDocs(){
-        const querySnapshot = await getDocs(collection(firestore, "users"));
-        querySnapshot.forEach((doc) => {
-          let idUser= `${doc.data().name}`;
-          console.log(idUser)
-        })}
-      ///////////////////////////////////////////////////////////
-  addTrack() {
-    this.props.onAddTrack(this.trackInput.value);
-    console.log("Add track", this.trackInput.value);
-    this.trackInput.value = "";
-  }
-  findTrack() {
-    console.log("find track", this.serchINPUT.value);
-    this.props.onFindTrack(this.serchINPUT.value);
-  }
+import {collection, where, getDocs,addDoc, query, deleteDoc } from "firebase/firestore";
+import { auth, firestore } from "../firebase";
 
-  deleteTrack(event) {
-    /*if (event.target.dataset.delete === event.target.id) {
-      return;
+const Home = ({ tracks,addTodos }) => {
+
+  const [inputName, setName] = useState("");
+///////////////////////////////////////////////////
+useEffect(() => {
+  async function findName(){
+    const citiesRef = collection(firestore, "to-do");
+    const q = query(citiesRef, where("UserID", "==", auth.lastNotifiedUid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+  console.log(doc.id, " => ", doc.data().UserID);
+  addTodos(doc.data().todo);
+    });
+  
     }
+    findName();
+}, []);
+ //////////////////////////////////////////////////////////////
+ const addTodoBD = async () => {
+  const docRef = await addDoc(collection(firestore, "to-do"), {
+    todo:inputName,
+    UserID: auth.lastNotifiedUid,
+    id: Math.floor(Math.random()* 10000000)
 
-    this.item = event.target.closest('this.item');
-    this.item.remove();*/
-    document.getElementById("worcks").remove();
-
-    //console.log("delete track", this.trackInput.value);
-    // this.props.ondeleteTrack(this.trackInput.value);
-  }
-
-  /*
-  pastState = (state = [], action) => {
-    switch (action.type) {
-      case "RESET_TYPE_ID":
-        return { ...state, type_id: null };
-      default:
-        return state;
-    }
-  };*/
-
-  checkFluency() {
-    var checkbox = document.getElementById("fluency");
-    if (checkbox.checked === true) {
-      document.getElementById("worcks").style.textDecorationLine =
-        "line-through";
-    } else {
-      document.getElementById("worcks").style.textDecorationLine = "none";
-    }
-  }
-
-  render() {
-    console.log(this.props.tracks);
-    return (
-      <div style={{ backgroundColor: "cadetblue" }}>
-        <div style={{ backgroundColor: "cadetblue" }}>
-          <h1
-            style={{
-              color: "red",
-              margin: "0px 0px 0px 550px",
-              fontSize: "90px",
-              backgroundColor: "cadetblue",
-            }}
-          >
-            {" "}
-            To Do List
-          </h1>
-        </div>
-
-        <div style={{ backgroundColor: "cadetblue" }}>
-          <input
-            type="text"
-            style={{
-              height: "35px",
-              width: "500px",
-              margin: "20px 0px 0px 500px",
-            }}
-            ref={(input) => {
-              this.trackInput = input;
-            }}
-            placeholder="To  do..."
-          />
-          <button
-            style={{
-              border: "0",
-              background: "green",
-              color: "white",
-              height: "25px",
-              borderRadius: "10px",
-            }}
-            onClick={this.addTrack.bind(this)}
-          >
-            Add To Do
-          </button>
-          <button
-            onClick={this.basedate.bind(this)}
-          >
-            Add dataBase
-          </button>
-          <button
-            onClick={this.gettDocs.bind(this)}
-          >
-            Add dataBase
-          </button>
-
-          <ul
-            className="list"
-            style={{
-              border: "2px solid rgb(241, 237, 237)",
-              width: "700px",
-              height: "700px",
-              margin: "20px 0px 0px 400px",
-              background: "rgb(241, 237, 237)",
-            }}
-          >
-            {this.props.tracks.map((track, index) => (
-              <ol style={{ fontSize: "26px" }} key={index} id="worcks">
-                {track.name}
-                <input
-                  id="fluency"
-                  type="checkbox"
-                  onClick={this.checkFluency.bind(this)}
-                  style={{
-                    borderBlockColor: "#0b76ef",
-                    backgroundColor: "#0b76ef",
-                  }}
-                  key={index}
-                />
-                <button
-                  id="delite"
-                  style={{
-                    border: "0",
-                    background: "black",
-                    color: "white",
-                    height: "25px",
-                    borderRadius: "10px",
-                  }}
-                  onClick={this.deleteTrack.bind(this)}
-                >
-                  DELETE
-                </button>
-              </ol>
-            ))}
-          </ul>
-        </div>
-        <div className="Find" style={{ margin: "-900px 0px 0px 1200px" }}>
-          <input
-            type="text"
-            ref={(input) => {
-              this.serchINPUT = input;
-            }}
-            placeholder="Find"
-          />
-          <button
-            onClick={this.findTrack.bind(this)}
-            style={{
-              border: "0",
-              background: "lightseagreen",
-              color: "white",
-              height: "25px",
-              borderRadius: "10px",
-            }}
-          >
-            Find To Do
-          </button>
-          <ol className="list2">
-            {this.props.tracks
-              .filter((track) =>
-                track.name.includes(this.props.tracks.filtertracks)
-              )
-              .map((track, index) => (
-                <li key={index}>{track.name}</li>
-              ))}
-          </ol>
-        </div>
-      </div>
-    );
-  }
+   });
+  return docRef
 }
 
+async function addTodo (todo){
+  const todoAdd = await addTodoBD(todo);
+  addTodos(inputName);
+  console.log("test -->", todoAdd);
+ }
+
+    ////////////////////////////////////////////////////////////
+async function deleteTrack() {
+  const citiesRef = collection(firestore, "to-do");
+
+  const q = query(citiesRef, where("id", "==", 3272242));
+ const querySnapshot = await deleteDoc(q);
+    querySnapshot.forEach((doc) => {
+ console.log(doc.data().todo);
+    });
+  
+
+}
+
+////////////////////////////////////////////////////////////////
+ return (
+  <div style={{ backgroundColor: "cadetblue" }}>
+    <div style={{ backgroundColor: "cadetblue" }}>
+      <h1
+        style={{
+          color: "red",
+          margin: "0px 0px 0px 550px",
+          fontSize: "90px",
+          backgroundColor: "cadetblue",
+        }}
+      >
+        {" "}
+        To Do List
+      </h1>
+    </div>
+
+    <div style={{ backgroundColor: "cadetblue" }}>
+      <input
+        type="text"
+        id="n1"
+        style={{
+          height: "35px",
+          width: "500px",
+          margin: "20px 0px 0px 500px",
+        }}
+        value={inputName}
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+        placeholder="To  do..."
+      />
+      <button
+        style={{
+          border: "0",
+          background: "green",
+          color: "white",
+          height: "25px",
+          borderRadius: "10px",
+        }}
+        onClick={() => addTodo()}
+      >
+        Add To Do
+      </button>
+
+   
+
+      <ul
+        className="list"
+        style={{
+          border: "2px solid rgb(241, 237, 237)",
+          width: "700px",
+          height: "700px",
+          margin: "20px 0px 0px 400px",
+          background: "rgb(241, 237, 237)",
+        }}
+      >
+        {tracks.map((track, index) => (
+          <ol style={{ fontSize: "26px" }} key={index} id="worcks">
+            {track.todo}
+            <input
+              id="fluency"
+              type="checkbox"
+              style={{
+                borderBlockColor: "#0b76ef",
+                backgroundColor: "#0b76ef",
+              }}
+              key={index}
+            />
+            <button
+              id="delite"
+              style={{
+                border: "0",
+                background: "black",
+                color: "white",
+                height: "25px",
+                borderRadius: "10px",
+              }}
+              onClick={() => deleteTrack()}
+            >
+              DELETE
+            </button>
+          </ol>
+        ))}
+      </ul>
+    </div>
+    <div className="Find" style={{ margin: "-900px 0px 0px 1200px" }}>
+    </div>
+  </div>
+);
+};
+
 export default connect(
-  (state) => ({
+  (state) => (
+    {
     tracks: state.tracks,
   }),
   (dispatch) => ({
-    onAddTrack: (trackName) => {
+    addTodos: (trackName) => {
       const payload = {
-        id: Date.now().toString(),
-        name: trackName,
-        userID: 24,
-        
+        todo: trackName,
+        UserID:' ',
+        id:'',
        
       };
 
@@ -212,6 +163,7 @@ export default connect(
     onFindTrack: (name) => {
       dispatch(findTrack(name));
     },
-
-  })
+   
+  }),
 )(Home);
+

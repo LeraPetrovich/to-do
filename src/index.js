@@ -9,7 +9,7 @@ import addId from "./React/middlewear";
  
 
 const store = createStore(
-  reduser, applyMiddleware(addId)
+  reduser, applyMiddleware(addId),
 );
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -18,3 +18,4 @@ root.render(
     <App />
   </Provider>
 );
+//applyMiddleware(addFirebaseId)

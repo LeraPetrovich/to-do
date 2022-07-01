@@ -1,44 +1,50 @@
 import "../App.css";
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { connect,useSelector } from "react-redux";
 import { NavLink} from "react-router-dom";
-import { addInput } from "../React/action-creator";
-import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { addInput } from "../React/action-creator"; 
 import { firestore } from "../firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-const Input = ({ input, inputToDo }) => {
+import { getDocs,collection, query, where  } from "firebase/firestore";
+const Input = ({ input }) => {
   console.log(input);
   const [inputEmail, setEmail] = useState("");
   const [inputPasword, setPassword] = useState("");
 
+  const tracks = useSelector((state) => state.tracks)
+  console.log(tracks);
 
-  //////////////////////////////////////////////////////////////
-  async function dataBase(){
-    const docRef = await addDoc(collection(firestore, "users"), {
-      emale: inputEmail,
-      password: inputPasword,
-    });
-    console.log("Document written with ID: ", docRef.id);
-}
-  /////////////////////////////////////////////////////////////
-  async function gettDocs(){
-  const querySnapshot = await getDocs(collection(firestore, "users"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => name:${doc.data().name}, password:${doc.data().password}`);
-  })}
- 
+
  //////////////////////////////////////////////////////////////
  let navigate = useNavigate();
- function userInput(){ const auth = getAuth();
+  function userInput(){ const auth = getAuth();
   signInWithEmailAndPassword(auth, inputEmail, inputPasword).then(() => {
       navigate("../todo", { replace: true });
+      const citiesRef = collection(firestore, "to-do");
+      const q = query(citiesRef, where("UserID", "==", auth.lastNotifiedUid));
+     // console.log(auth.lastNotifiedUid)
+      async function getName(){ const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          //console.log(doc.id, " => ", doc.data());
+        });}
+        getName();
+     
   })
   .catch(() => {
   alert('Invalid password. If you are not registered, please register');
   })
+
+  async function gettDocs(){
+    const querySnapshot = await getDocs(collection(firestore, "to-do"));
+    querySnapshot.forEach((doc) => {
+   //   console.log(`${doc.id} => name:${doc.data().todo}`);
+    })}
+    gettDocs();
 }
  //////////////////////////////////////////////////////////////
+
+
   return (
     <div
       style={{
@@ -75,29 +81,12 @@ const Input = ({ input, inputToDo }) => {
             placeholder="Password"
           />
         </p>
-        <button
-          className="nav-link-button-registr"
-          onClick={() => inputToDo(inputEmail,inputPasword)}
-        >
-          Send
-        </button>
-        <button
-          className="nav-link-button-registr"
-          onClick={() => dataBase()}
-        >
-          Send to dataBase
-        </button>
-        <button
-          className="nav-link-button-registr"
-          onClick={() => gettDocs()}
-        >
-          Get 
-        </button>
+ 
         <button
           className="nav-link-button-registr"
           onClick={() => userInput()}
         >
-         UserInp
+         Send
         </button>
         <div>
           <p>
@@ -129,7 +118,7 @@ export default connect(
       const payload = {
         id: Date.now().toString(),
         name: input,
-        userId: Date.now().toString(),
+        UserID: ' ',
       };
       dispatch(addInput(payload));
     },

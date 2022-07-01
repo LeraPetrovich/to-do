@@ -1,37 +1,51 @@
-/*import { getDocs } from "firebase/firestore"; 
-import { firestore, collection } from "../firebase";
+import {onAuthStateChanged, getAuth} from "firebase/auth";
 
-  const querySnapshot = await getDocs(collection(firestore, "users"));
-  querySnapshot.forEach((doc) => {
-    let idUser= `${doc.data().name}`;
-    console.log(idUser)
-  })*/
+  
+  const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+      var uid = user.uid;
+     console.log(uid);
+    
+  });
+  
+  
+
 
 export default function addId() {
     return next => action => {
-     //if(!action.general) return next(action)
      next({
       ...action,
       payload: {
         ...action.payload,
-        id: Math.floor(Math.random()* 1000),
-        uderId: Math.floor(Math.random()* 1000)
+        id: Math.floor(Math.random()* 10000000),
+        UserID: auth.lastNotifiedUid,
       }
      })
     
     }
   }
- /* export  function addUserId() {
-    return next => action => {
-     //if(!action.general) return next(action)
-     next({
-      ...action,
-      payload: {
-        ...action.payload,
-        id: Math.floor(Math.random()* 1000),
-        uderId: querySnapshot
-      }
-     })
-    
-    }
-  }*/
+
+/*function getId(){
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      var uid = user.uid;
+     console.log(uid);
+    } 
+  });
+}
+   
+  
+
+export function addFirebaseId(){
+  return next => action => {
+    next({
+     ...action,
+     payload: {
+       ...action.payload,
+       todo: getId(),
+     }
+    })
+   
+   }
+}*/
