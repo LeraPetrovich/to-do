@@ -7,6 +7,7 @@ import { firestore } from "../firebase";
 import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getDocs,collection, query, where  } from "firebase/firestore";
+import style from '../module/Todo.module.scss'
 const Input = ({ input }) => {
   console.log(input);
   const [inputEmail, setEmail] = useState("");
@@ -47,12 +48,7 @@ const Input = ({ input }) => {
 
   return (
     <div
-      style={{
-        margin: "0 auto",
-        height: "500px",
-        width: "700px",
-        marginLeft: "400px",
-      }}
+     className={style.inputcontent}
     >
       <h2 className="Register-text" style={{ textAlign: "center" }}>
         Input:

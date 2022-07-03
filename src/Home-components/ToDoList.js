@@ -1,28 +1,30 @@
-
-import {collection, where, query, deleteDoc } from "firebase/firestore";
+import React from "react";
+import {deleteDoc,doc } from "firebase/firestore";
 import { firestore } from "../firebase";
+import { connect,useSelector } from "react-redux";
+import style from '../module/Todo.module.scss'
+import { deleteTac } from "../React/action-creator";
+import { update } from "firebase/database";
+import mops from '../ico/free-icon-rubbish-bin-1483063.png';
+import pensil from '../ico/pencil_icon-icons.com_64998.ico'
 
-const TODOLIST = () => {
+const TODOLIST = ({tracks}) => {
+  const track = useSelector((state) => state.tracks)
+
+tracks.forEach(element => {
+  console.log(element.id);
+});
+  console.log(track);
+
     async function deleteTrack() {
-        const citiesRef = collection(firestore, "to-do");
-        const q = query(citiesRef, where("id", "==", 3272242));
-       const querySnapshot = await deleteDoc(q);
-          querySnapshot.forEach((doc) => {
-       console.log(doc.data().todo);
-          });
-        
-      
+      await deleteDoc(doc(firestore, "to-do", "3Ua8GfQaJeyUFpoPHW5t"));
+deleteTac(tracks[1]);
       }
+      
+
 return(
 <ul
-        className="list"
-        style={{
-          border: "2px solid rgb(241, 237, 237)",
-          width: "700px",
-          height: "700px",
-          margin: "20px 0px 0px 400px",
-          background: "rgb(241, 237, 237)",
-        }}
+        className={style.list}
       >
         {tracks.map((track, index) => (
           <ol style={{ fontSize: "26px" }} key={index} id="worcks">
@@ -38,16 +40,19 @@ return(
             />
             <button
               id="delite"
-              style={{
-                border: "0",
-                background: "black",
-                color: "white",
-                height: "25px",
-                borderRadius: "10px",
-              }}
               onClick={() => deleteTrack()}
             >
-              DELETE
+              <img src={mops} alt="trach"
+              className={style.img}
+              />
+            </button>
+            <button
+              id="delite"
+              onClick={() => update()}
+            >
+              <img src={pensil} alt="portlandlogo"
+              className={style.img}
+              />
             </button>
           </ol>
         ))}
@@ -56,4 +61,22 @@ return(
 );
 
 };
-export default TODOLIST;
+export default connect(
+  (state) => (
+    {
+    tracks: state.tracks,
+  }),
+  (dispatch) => ({
+    deleteTac: (trackName) => {
+      const payload = {
+        todo: trackName,
+        UserID:' ',
+        id:'',
+       
+      };
+
+      dispatch(deleteTac(payload));
+    },
+   
+  }),
+  )(TODOLIST);

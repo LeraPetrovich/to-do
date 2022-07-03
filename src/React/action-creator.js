@@ -4,6 +4,8 @@ export const RESET_TYPE_ID = 'RESET_TYPE_ID'
 export const ADD_INPUT = 'ADD_INPUT'
 export const ADD_TODO = 'ADD_TODO'
 export const FIND_TRACK = 'FIND_TRACK' 
+export const DELETE_TRACK = 'DELETE_TRACK' 
+export const UPDATE_TODO='UPDATE_TODO'
 export function findTrack( name ){
 return {
  type: FIND_TRACK, 
@@ -24,3 +26,16 @@ return {
         return{
            type: ADD_TODO,
             payload: payload }}
+
+
+            export function deleteTac( payload ){
+               return{
+                  type: DELETE_TRACK, 
+                  payload:payload
+                  }}
+                  
+                  export function update( payload ){
+                     return{
+                        type: UPDATE_TODO, 
+                        payload:payload
+                        }}
