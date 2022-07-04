@@ -1,10 +1,10 @@
 import React from "react";
-import {deleteDoc,doc } from "firebase/firestore";
-import { firestore } from "../firebase";
+import {deleteDoc,doc,collection, where, getDocs, query} from "firebase/firestore";
+import { firestore,auth } from "../firebase";
 import { connect,useSelector } from "react-redux";
 import style from '../module/Todo.module.scss'
 import { deleteTac } from "../React/action-creator";
-import { update } from "firebase/database";
+//import { update } from "firebase/database";
 import mops from '../ico/free-icon-rubbish-bin-1483063.png';
 import pensil from '../ico/pencil_icon-icons.com_64998.ico'
 
@@ -17,7 +17,17 @@ tracks.forEach(element => {
   console.log(track);
 
     async function deleteTrack() {
-      await deleteDoc(doc(firestore, "to-do", "3Ua8GfQaJeyUFpoPHW5t"));
+      const citiesRef = collection(firestore, "to-do");
+      console.log(citiesRef)
+        const q = query(citiesRef, where("UserID", "==", auth.lastNotifiedUid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(el=>{
+          console.log(el.id)
+          
+      deleteDoc(doc(firestore, "to-do", el.id));
+        })
+       
+      //await deleteDoc(doc(firestore, "to-do", "3Ua8GfQaJeyUFpoPHW5t"));
 deleteTac(tracks[1]);
       }
       
@@ -48,7 +58,7 @@ return(
             </button>
             <button
               id="delite"
-              onClick={() => update()}
+             
             >
               <img src={pensil} alt="portlandlogo"
               className={style.img}

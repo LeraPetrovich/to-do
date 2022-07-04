@@ -34,7 +34,7 @@ const CreateForm=({ addTodos })=>{
     async function addTodo (todo){
       const todoAdd = await addTodoBD(todo);
       addTodos(inputName);
-      console.log("test -->", todoAdd);
+      console.log("test -->", todoAdd.id);
      }
     
     ////////////////////////////////////////////////////////////////
